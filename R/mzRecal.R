@@ -60,7 +60,7 @@ mzRecal <- function(file,
   ppmCalibrators <- list()
   intercept <- numeric(nScan)
   slope <- numeric(nScan)
-  coefsLastScan <- 1
+  coefsLastScan <- c(0, 1)
 
   ####################################
   # Loop thru & calibrate all scans
