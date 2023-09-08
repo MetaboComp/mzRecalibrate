@@ -1,0 +1,20 @@
+Package: mzRecalibrate
+Type: Package
+Title: Recalibration of m/z axis in mzML objects (e.g. from LC-HRMS)
+Version: 0.1.00
+Author: Carl Brunius <carl.brunius@chalmers.se>
+Maintainer: Carl Brunius <carl.brunius@chalmers.se>
+Description: The package contains functions to identify "dragging" m/z traces
+    suitable for mass axis (m/z) calibration, to visualize these traces for manual curation
+    and to perform actual mass axis recalibration on a scan by scan basis.
+Imports:
+    mzR,
+    MSnbase,
+    xcms,
+    viridis,
+    foreach,
+    doParallel
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
