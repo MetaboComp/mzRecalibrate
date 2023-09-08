@@ -25,10 +25,10 @@ if (!require("MSnbase", quietly = TRUE)) BiocManager::install("MSnbase")
 if (!require("xcms", quietly = TRUE)) BiocManager::install("xcms")
 ```
 
-To install the mzRecalibrate package you also need the `remotes` R package
+### 1. Installation
 ```
-if (!require("remotes", quietly = TRUE)) install.packages('remotes')
-remotes::install_gitlab('CarlBrunius/mzRecalibrate')
+if (!require("remotes", quietly = TRUE)) install.packages("remotes")
+remotes::install_github("MetaboComp/mzRecalibrate")
 ```
 
 ## Version history
