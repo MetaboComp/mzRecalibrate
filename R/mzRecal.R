@@ -251,7 +251,7 @@ mzRecal <- function(file,
         }
         calibrateUsingLast = TRUE
       }
-      if(length(ppm) >= 2) {
+      if(length(ppm) >= 2 && !is.na(t.test(ppm, mu = 0)$p.value)) {
         if(t.test(ppm, mu = 0)$p.value < 0.05) {
           if(verbose) {
             cat('Scan', s, '- Calibrant ppm different from zero at p < 0.05 - ')
