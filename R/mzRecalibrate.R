@@ -53,7 +53,7 @@ mzRecalibrate <- function(files,
 
     if (save & verbose) {
       print("Here2")
-      clusterEvalQ(cl, sink(paste0(dirname(file), '/mzRecal_log/', Sys.getpid(), '.txt')))
+      clusterEvalQ(cl, sink(paste0("D:/AntonRibbenstedt/COSMC-Uncal_POS", "/mzRecal_log/", Sys.getpid(), '.txt')))
     } 
   }
   
