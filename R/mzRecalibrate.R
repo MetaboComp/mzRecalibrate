@@ -46,11 +46,6 @@ mzRecalibrate <- function(files,
 
   library(doParallel)
   
-  if(!is.null(nCores)){
-    cl <- makeCluster(nCores)
-    registerDoParallel(cl)
-  }
-  
 
   if (parallel) "%doVersion%" <- get("%dopar%") else "%doVersion%" <- get("%do%") # Parallel vs serial
 
@@ -76,7 +71,4 @@ mzRecalibrate <- function(files,
             ...)
   }
   
-  if(!is.null(nCores)){
-    stopCluster(cl)
-  }
 }
