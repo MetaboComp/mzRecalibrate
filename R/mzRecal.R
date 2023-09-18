@@ -42,12 +42,10 @@ mzRecal <- function(file,
                     nCores = NULL,
                     ...) {
   
-  if(is.null(nCores)){
-    if (save & verbose) {
-      if(!dir.exists(paste0(dirname(file), '/mzRecal_log'))) dir.create(paste0(dirname(file), '/mzRecal_log'))
-      sink(file = paste0(dirname(file), '/mzRecal_log/', basename(file), '.txt'))
-    } 
-  }
+  if (save & verbose) {
+    if(!dir.exists(paste0(dirname(file), '/mzRecal_log'))) dir.create(paste0(dirname(file), '/mzRecal_log'))
+    sink(file = paste0(dirname(file), '/mzRecal_log/', basename(file), '.txt'))
+  } 
 
   # Read raw data and extract header info
   MS <- readMSData(file, msLevel = 1, verbose = FALSE)
@@ -324,8 +322,9 @@ mzRecal <- function(file,
   }
 
   # Close sink
-  if (is.null(nCores)){
-    if (save & verbose) sink()
+  if (save & verbose) {
+    if(!dir.exists(paste0(dirname(file), '/mzRecal_log'))) dir.create(paste0(dirname(file), '/mzRecal_log'))
+    sink()
   }
 
   # Return mz re-calibration metrics

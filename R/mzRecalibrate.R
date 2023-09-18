@@ -47,14 +47,8 @@ mzRecalibrate <- function(files,
   library(doParallel)
   
   if(!is.null(nCores)){
-    print("Here")
     cl <- makeCluster(nCores)
     registerDoParallel(cl)
-
-    if (save & verbose) {
-      print("Here2")
-      clusterEvalQ(cl, sink(paste0("D:/AntonRibbenstedt/COSMC-Uncal_POS", "/mzRecal_log/", Sys.getpid(), '.txt')))
-    } 
   }
   
 
