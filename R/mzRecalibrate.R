@@ -67,7 +67,6 @@ mzRecalibrate <- function(files,
             jpg = jpg,
             save = save,
             verbose = verbose,
-            nCores=nCores,
             ...)
   }
   
