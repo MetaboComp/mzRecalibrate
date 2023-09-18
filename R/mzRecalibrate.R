@@ -47,10 +47,12 @@ mzRecalibrate <- function(files,
   library(doParallel)
   
   if(!is.null(nCores)){
+    print("Here")
     cl <- makeCluster(nCores)
     registerDoParallel(cl)
 
     if (save & verbose) {
+      print("Here2")
       clusterEvalQ(cl, sink(paste0(dirname(file), '/mzRecal_log/', Sys.getpid(), '.txt')))
     } 
   }
@@ -80,5 +82,7 @@ mzRecalibrate <- function(files,
             ...)
   }
   
-  stopCluster(cl)
+  if(!is.null(nCores)){
+    stopCluster(cl)
+  }
 }
