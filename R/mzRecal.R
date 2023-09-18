@@ -39,7 +39,6 @@ mzRecal <- function(file,
                     jpg = TRUE,
                     save = TRUE,
                     verbose = FALSE,
-                    nCores = NULL,
                     ...) {
   
   if (save & verbose) {
