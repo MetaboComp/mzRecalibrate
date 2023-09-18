@@ -41,9 +41,20 @@ mzRecalibrate <- function(files,
                           save = TRUE,
                           verbose = TRUE,
                           parallel = TRUE,
+                          nCores = NULL,
                           ...) {
 
   library(doParallel)
+  
+  if(!is.null(nCores)){
+    cl <- makeCluster(nCores)
+    registerDoParallel(cl)
+
+    if (save & verbose) {
+      clusterEvalQ(cl, sink(paste0(dirname(file), '/mzRecal_log/', Sys.getpid(), '.txt')))
+    } 
+  }
+  
 
   if (parallel) "%doVersion%" <- get("%dopar%") else "%doVersion%" <- get("%do%") # Parallel vs serial
 
@@ -65,6 +76,7 @@ mzRecalibrate <- function(files,
             jpg = jpg,
             save = save,
             verbose = verbose,
+            nCores=nCores,
             ...)
   }
 }
