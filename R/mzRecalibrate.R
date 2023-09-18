@@ -79,4 +79,6 @@ mzRecalibrate <- function(files,
             nCores=nCores,
             ...)
   }
+  
+  stopCluster(cl)
 }
