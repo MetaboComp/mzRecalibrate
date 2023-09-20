@@ -46,11 +46,10 @@ mzRecalibrate <- function(files,
 
   library(doParallel)
   
-
   if (parallel) "%doVersion%" <- get("%dopar%") else "%doVersion%" <- get("%do%") # Parallel vs serial
-
+  
   pkg <- c('MSnbase', 'mzRecalibrate')
-
+  
   iteration <- foreach(file = files, .packages = pkg) %doVersion% {
     mzRecal(file,
             mzCandidates = mzCandidates,
@@ -69,5 +68,4 @@ mzRecalibrate <- function(files,
             verbose = verbose,
             ...)
   }
-  
 }
