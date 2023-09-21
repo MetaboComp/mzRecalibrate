@@ -1,3 +1,29 @@
+#' Recalibrate mass axis for MS1 (mzML format) - One file only
+#'
+#' Please see mzRecalibrate for standard interface for multiple files and parallelization
+#'
+#' @param file mzML file
+#' @param mzCandidates data frame
+#' @param ppmFind ppm limit to discover candidate from data
+#' @param ppmQuantile ppm quantile limit to exclude potential candidates from calibration (deviation from observed ppms)
+#' @param ppmLimit ppm quantile limit to exclude potential candidates from calibration (mean absolute error)
+#' @param intensityLimit minimum signal intensity (to avoid "frayed rope")
+#' @param calibLimit Lower limit, above which there must be a candidate in order to perform calibration
+#' @param twoStage If TRUE, performs a rough calibration in-between pre-calibration (using last scan settings) and fine calibration
+#' @param preCalibrate If TRUE, performs a pre-calibration of the mass axis using the calibration line from the last scan
+#' @param ppmFindRough ppm limit to discover candidate from data in rough calibration (if twoStage = TRUE)
+#' @param ppmQuantileRough ppm quantile limit to exclude potential candidates from rough calibration
+#' @param plot If TRUE plots calibration metrics (mz and number of calibrants; intercept and slope)
+#' @param jpg If TRUE and plot = TRUE plots to jpg file in "mzRecal_log/" folder
+#' @param save If TRUE saves recalibrated file in "mzRecal/" folder
+#' @param verbose If TRUE reveals additional verbose information (if save = TRUE, sinks to txt file in "mzRecal_log/" folder)
+#' @param ...
+#'
+#' @return saves recalibrated file
+#' @export
+#'
+#' @examples
+#' # To be added
 mzRecal <- function(file,
                     mzCandidates,
                     ppmFind = 50,
@@ -34,6 +60,7 @@ mzRecal <- function(file,
   ppmCalibrators <- list()
   intercept <- numeric(nScan)
   slope <- numeric(nScan)
+  coefsLastScan <- c(0, 1)
   
   ####################################
   # Loop thru & calibrate all scans
@@ -224,7 +251,7 @@ mzRecal <- function(file,
         }
         calibrateUsingLast = TRUE
       }
-      if(length(ppm) >= 2) {
+      if(length(ppm) >= 2 && !is.na(t.test(ppm, mu = 0)$p.value)) {
         if(t.test(ppm, mu = 0)$p.value < 0.05) {
           if(verbose) {
             cat('Scan', s, '- Calibrant ppm different from zero at p < 0.05 - ')
