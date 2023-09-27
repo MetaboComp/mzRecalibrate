@@ -61,13 +61,13 @@ multiEIC <- function(files, mz, mzmin, mzmax, ppm = 100) {
 
     # Plot EIC
     colEIC <- viridis::viridis(10, alpha = 0.75)[as.numeric(cut(eicInt,breaks = 10))]
-    plot(RT, eicInt, type = 'l', col = 'grey40', las = 1, ylab = '', main = file, cex.main = .85)
+    plot(RT, eicInt, type = 'l', col = 'grey40', las = 1, ylab = '', main = basename(file), cex.main = .85)
     abline(h = 1000, col = 'grey80')
     points(RT, eicInt, pch = 15, cex = .5, col = colEIC)
     legend('topleft', legend = c('sumInt (mzmin-mazmax)', '1000'), lty = rep(1, 2), col = c('grey40', 'grey80'), bty = 'n', cex = 0.75)
 
     # Plot rt-mz map
-    plot(RT[sPlot], mzPlot, pch = 16, cex = .5, type = 'n', ylim = c(mz - dmz, mz + dmz), las = 1, ylab = '', main = file, cex.main = .85)
+    plot(RT[sPlot], mzPlot, pch = 16, cex = .5, type = 'n', ylim = c(mz - dmz, mz + dmz), las = 1, ylab = '', main = basename(file), cex.main = .85)
     abline(h = c(mz, mzmin, mzmax), col = c('grey40', 'grey80', 'grey80'))
     colSpect <- viridis::viridis(10)[as.numeric(cut(intPlot,breaks = 10))]
     points(RT[sPlot], mzPlot, pch = 16, cex = .5, col = colSpect)
