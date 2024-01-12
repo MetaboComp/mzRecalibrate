@@ -9,10 +9,12 @@
 #' @param mzmin min mz range (for EIC sum)
 #' @param mzmax max mz range (for EIC sum)
 #' @param ppm mz expansion in rt-mz-map
+#' @param rtmin min rt range (defaults to first rt)
+#' @param rtmax max rt range (defaults to last rt)
 #'
 #' @return plot (base R) with viridis color for intensity
 #' @export
-multiEIC <- function(files, mz, mzmin, mzmax, ppm = 100) {
+multiEIC <- function(files, mz, mzmin, mzmax, ppm = 100, rtmin, rtmax) {
 
   nFile <- length(files)
 
@@ -24,7 +26,12 @@ multiEIC <- function(files, mz, mzmin, mzmax, ppm = 100) {
     ms <- openMSfile(file)
     hd <- header(ms)
 
-    nScan <- max(hd$seqNum)
+    if (missing(rtmin)) rtmin <- min(hd$retentionTime)
+    if (missing(rtmax)) rtmax <- max(hd$retentionTime)
+
+    scanMin <- which.min(abs(hd$retentionTime - rtmin))
+    scanMax <- which.min(abs(hd$retentionTime - rtmax))
+    nScan <- scanMax - scanMin + 1
 
     # Allocate summed intensities for EIC
     eicInt <- numeric(nScan)
@@ -36,7 +43,8 @@ multiEIC <- function(files, mz, mzmin, mzmax, ppm = 100) {
 
     # loop thru scans to extract points and EIC
     for (s in 1:nScan) {
-      spect <- peaks(ms, s)
+      scan <- s + scanMin - 1
+      spect <- peaks(ms, scan)
       mzs <- spect[,1]
       int <- spect[,2]
       # plot(mzs, int, pch = '.')
@@ -52,7 +60,7 @@ multiEIC <- function(files, mz, mzmin, mzmax, ppm = 100) {
       if (length(mzPlotNew) > 0) {
         mzPlot <- c(mzPlot, mzPlotNew) # Add the new mzs
         intPlot <- c(intPlot, int[mzs >= (mz - dmz) & mzs <= (mz + dmz)]) # Add corresponding intensities
-        sPlot <- c(sPlot, rep(s, length(mzPlotNew))) # Add at what scan
+        sPlot <- c(sPlot, rep(scan, length(mzPlotNew))) # Add at what scan
       }
     }
 
@@ -61,13 +69,13 @@ multiEIC <- function(files, mz, mzmin, mzmax, ppm = 100) {
 
     # Plot EIC
     colEIC <- viridis::viridis(10, alpha = 0.75)[as.numeric(cut(eicInt,breaks = 10))]
-    plot(RT, eicInt, type = 'l', col = 'grey40', las = 1, ylab = '', main = basename(file), cex.main = .85)
+    plot(RT[scanMin:scanMax], eicInt, type = 'l', col = 'grey40', las = 1, ylab = '', main = file, cex.main = .85)
     abline(h = 1000, col = 'grey80')
-    points(RT, eicInt, pch = 15, cex = .5, col = colEIC)
+    points(RT[scanMin:scanMax], eicInt, pch = 15, cex = .5, col = colEIC)
     legend('topleft', legend = c('sumInt (mzmin-mazmax)', '1000'), lty = rep(1, 2), col = c('grey40', 'grey80'), bty = 'n', cex = 0.75)
 
     # Plot rt-mz map
-    plot(RT[sPlot], mzPlot, pch = 16, cex = .5, type = 'n', ylim = c(mz - dmz, mz + dmz), las = 1, ylab = '', main = basename(file), cex.main = .85)
+    plot(RT[sPlot], mzPlot, xlim = c(rtmin, rtmax), pch = 16, cex = .5, type = 'n', ylim = c(mz - dmz, mz + dmz), las = 1, ylab = '', main = file, cex.main = .85)
     abline(h = c(mz, mzmin, mzmax), col = c('grey40', 'grey80', 'grey80'))
     colSpect <- viridis::viridis(10)[as.numeric(cut(intPlot,breaks = 10))]
     points(RT[sPlot], mzPlot, pch = 16, cex = .5, col = colSpect)
